@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Stopwatch Outer Ring -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,28 A26,26 0 1,0 54,80 A26,26 0 1,0 54,28 Z M54,32 A22,22 0 1,1 54,76 A22,22 0 1,1 54,32 Z" />
+
+    <!-- Top Button -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,20 h8 v8 h-8 z" />
+
+    <!-- Side Button (Right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74.4,37.6 l4.2,-4.2 l4.2,4.2 l-4.2,4.2 z" />
+
+    <!-- Football Pattern - Center Pentagon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,46 L61.6,51.5 L58.7,60.5 L49.3,60.5 L46.4,51.5 Z" />
+
+    <!-- Football Pattern - Radial Lines -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,46 L54,32 M61.6,51.5 L74.9,47.2 M58.7,60.5 L66.9,71.8 M49.3,60.5 L41.1,71.8 M46.4,51.5 L33.1,47.2" />
+
+</vector>

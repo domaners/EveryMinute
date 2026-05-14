@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.EveryMinute" parent="Theme.MaterialComponents.Light" />
+</resources>

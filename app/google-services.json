@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1038368773962",
+    "project_id": "everyminute-ca791",
+    "storage_bucket": "everyminute-ca791.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038368773962:android:9643f3c0480b82b82d13b3",
+        "android_client_info": {
+          "package_name": "com.domaners.everyminute"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038368773962-h394f0educ5o4h83oqt72rih3p2q1bkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApzzsQK8MSqVutESgkd4K7Dd0OSeOWZdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038368773962-h394f0educ5o4h83oqt72rih3p2q1bkq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
