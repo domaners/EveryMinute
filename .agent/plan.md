@@ -26,23 +26,31 @@ EveryMinute: An Android app for managing Junior football teams. The app allows c
 - Coil (Image loading)
 
 ## Implementation Steps
+**Total Duration:** 16h 47m 39s
 
 ### Task_1_Infrastructure_Auth: Initialize Firebase (Auth & Firestore), set up Navigation, and implement Authentication. Create the base data models and a placeholder Dashboard.
-- **Status:** IN_PROGRESS
+- **Status:** COMPLETED
+- **Updates:** Implemented full authentication flow including UI and logic for Email/Password and Google Sign-In.
+- Updated LoginScreen.kt with Material 3 design, validation, and loading states.
+- Integrated Credential Manager API for Google Sign-In.
+- AuthRepository and MainViewModel updated to handle Firebase Auth methods and state transitions.
+- Infrastructure (Firebase, Navigation, Base Models) set up.
+Note: User needs to provide google-services.json and update the OAuth Web Client ID.
 - **Acceptance Criteria:**
   - Firebase project integrated with Auth and Firestore
   - Google and Email/Password authentication functional
   - Navigation3 structure with Dashboard, Team, and Fixtures screens
   - Player, Fixture, and Team data models defined
-- **StartTime:** 2026-05-14 13:16:31 BST
+- **Duration:** 16h 47m 39s
 
 ### Task_2_Team_Fixture_Management: Implement Player and Fixture management features including profiles and availability tracking.
-- **Status:** PENDING
+- **Status:** IN_PROGRESS
 - **Acceptance Criteria:**
   - Player CRUD (Add/Edit/Delete) with Firestore sync and Coil image loading
   - Detailed Player Profile screens
   - Fixture management (Schedule/Edit) with availability tracking logic
   - Dashboard shows next/previous fixtures with status prompts
+- **StartTime:** 2026-05-14 20:04:10 BST
 
 ### Task_3_MatchDay_Pitch_Formation: Develop the interactive pitch for formation planning and match statistics tracking.
 - **Status:** PENDING

@@ -13,4 +13,14 @@ sealed interface Destination : NavKey {
     data object Team : Destination
     @Serializable
     data object Fixtures : Destination
+    
+    @Serializable
+    data class PlayerProfile(val playerId: String) : Destination
+    @Serializable
+    data class AddEditPlayer(val playerId: String? = null) : Destination
+    
+    @Serializable
+    data class FixtureDetail(val fixtureId: String) : Destination
+    @Serializable
+    data class AddEditFixture(val fixtureId: String? = null) : Destination
 }
