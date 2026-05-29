@@ -15,9 +15,11 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.domaners.everyminute.ui.navigation.Destination
+import com.domaners.everyminute.ui.screens.CreateTeamScreen
 import com.domaners.everyminute.ui.screens.DashboardScreen
 import com.domaners.everyminute.ui.screens.FixturesScreen
 import com.domaners.everyminute.ui.screens.LoginScreen
+import com.domaners.everyminute.ui.screens.RegisterScreen
 import com.domaners.everyminute.ui.screens.TeamScreen
 
 @Composable
@@ -32,9 +34,11 @@ fun EveryMinuteApp(
     // Handle Auth changes to update backstack
     LaunchedEffect(currentUser) {
         if (currentUser == null) {
-            backStack.clear()
-            backStack.add(Destination.Login)
-        } else if (backStack.lastOrNull() == Destination.Login) {
+            if (backStack.lastOrNull() != Destination.Login && backStack.lastOrNull() != Destination.Register) {
+                backStack.clear()
+                backStack.add(Destination.Login)
+            }
+        } else if (backStack.lastOrNull() == Destination.Login || backStack.lastOrNull() == Destination.Register) {
             backStack.clear()
             backStack.add(Destination.Dashboard)
         }
@@ -98,10 +102,34 @@ fun EveryMinuteApp(
             entryProvider = { key ->
                 when (key) {
                     is Destination.Login -> NavEntry(key) {
-                        LoginScreen(onLoginSuccess = { })
+                        LoginScreen(
+                            onRegisterClick = {
+                                backStack.add(Destination.Register)
+                            },
+                            onLoginSuccess = { }
+                        )
+                    }
+                    is Destination.Register -> NavEntry(key) {
+                        RegisterScreen(
+                            onLoginClick = {
+                                backStack.removeAt(backStack.size - 1)
+                            },
+                            onRegisterSuccess = { }
+                        )
                     }
                     is Destination.Dashboard -> NavEntry(key) {
-                        DashboardScreen()
+                        DashboardScreen(
+                            onCreateTeamClick = {
+                                backStack.add(Destination.CreateTeam)
+                            }
+                        )
+                    }
+                    is Destination.CreateTeam -> NavEntry(key) {
+                        CreateTeamScreen(
+                            onTeamCreated = {
+                                backStack.removeAt(backStack.size - 1)
+                            }
+                        )
                     }
                     is Destination.Team -> NavEntry(key) {
                         TeamScreen()

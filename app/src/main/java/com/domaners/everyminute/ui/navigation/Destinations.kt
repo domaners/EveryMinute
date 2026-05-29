@@ -8,7 +8,11 @@ sealed interface Destination : NavKey {
     @Serializable
     data object Login : Destination
     @Serializable
+    data object Register : Destination
+    @Serializable
     data object Dashboard : Destination
+    @Serializable
+    data object CreateTeam : Destination
     @Serializable
     data object Team : Destination
     @Serializable

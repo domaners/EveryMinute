@@ -30,33 +30,32 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    onRegisterClick: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {}
+    onLoginClick: () -> Unit = {},
+    onRegisterSuccess: () -> Unit = {}
 ) {
     val authState by viewModel.authState.collectAsState()
 
-    LoginContent(
+    RegisterContent(
         authState = authState,
-        onSignIn = viewModel::signInWithEmail,
-        onRegisterClick = onRegisterClick,
+        onSignUp = viewModel::signUpWithEmail,
+        onLoginClick = onLoginClick,
         onSignInWithCredential = viewModel::signInWithCredential
     )
 
-    // Optional: handle onLoginSuccess if navigation depends on it
     LaunchedEffect(authState) {
         if (authState is AuthState.Success) {
-            onLoginSuccess()
+            onRegisterSuccess()
         }
     }
 }
 
 @Composable
-fun LoginContent(
+fun RegisterContent(
     authState: AuthState,
-    onSignIn: (String, String) -> Unit,
-    onRegisterClick: () -> Unit,
+    onSignUp: (String, String) -> Unit,
+    onLoginClick: () -> Unit,
     onSignInWithCredential: (AuthCredential) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -67,8 +66,7 @@ fun LoginContent(
     val scope = rememberCoroutineScope()
     val credentialManager = CredentialManager.create(context)
 
-    // Web Client ID from google-services.json (client_type 3)
-    val webClientId = "1038368773962-h394f0educ5o4h83oqt72rih3p2q1bkq.apps.googleusercontent.com" 
+    val webClientId = "1038368773962-h394f0educ5o4h83oqt72rih3p2q1bkq.apps.googleusercontent.com"
 
     fun handleGoogleSignIn() {
         val googleIdOption = GetGoogleIdOption.Builder()
@@ -94,8 +92,7 @@ fun LoginContent(
                     onSignInWithCredential(firebaseCredential)
                 }
             } catch (e: Exception) {
-                Log.e("LoginScreen", "Google Sign In failed", e)
-                // Optionally show error in UI via a callback if needed
+                Log.e("RegisterScreen", "Google Sign In failed", e)
             }
         }
     }
@@ -109,12 +106,12 @@ fun LoginContent(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "EveryMinute",
+            text = "Create Account",
             style = MaterialTheme.typography.displayMedium,
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "Team Management Simplified",
+            text = "Join EveryMinute Today",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.secondary
         )
@@ -165,7 +162,7 @@ fun LoginContent(
 
         Button(
             onClick = {
-                onSignIn(email, password)
+                onSignUp(email, password)
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthState.Loading && email.isNotBlank() && password.length >= 6
@@ -177,12 +174,12 @@ fun LoginContent(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text("Login")
+                Text("Register")
             }
         }
 
-        TextButton(onClick = onRegisterClick) {
-            Text("Don't have an account? Register")
+        TextButton(onClick = onLoginClick) {
+            Text("Already have an account? Login")
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -196,19 +193,19 @@ fun LoginContent(
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthState.Loading
         ) {
-            Text("Sign in with Google")
+            Text("Sign up with Google")
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun RegisterScreenPreview() {
     EveryMinuteTheme {
-        LoginContent(
+        RegisterContent(
             authState = AuthState.Idle,
-            onSignIn = { _, _ -> },
-            onRegisterClick = { },
+            onSignUp = { _, _ -> },
+            onLoginClick = { },
             onSignInWithCredential = { }
         )
     }

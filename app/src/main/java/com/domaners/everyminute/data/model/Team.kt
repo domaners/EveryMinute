@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 data class Team(
     val id: String = "",
     val name: String = "",
-    val coachId: String = "",
+    val iconUrl: String? = null,
+    val coachIds: List<String> = emptyList(),
+    val parentIds: List<String> = emptyList(),
     val playerIds: List<String> = emptyList()
 )

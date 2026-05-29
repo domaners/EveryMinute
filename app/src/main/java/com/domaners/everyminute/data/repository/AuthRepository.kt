@@ -3,12 +3,16 @@ package com.domaners.everyminute.data.repository
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.tasks.await
 
-class AuthRepository(private val auth: FirebaseAuth = FirebaseAuth.getInstance()) {
+class AuthRepository(
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+) {
 
     private val _currentUser = MutableStateFlow<FirebaseUser?>(auth.currentUser)
     val currentUser: StateFlow<FirebaseUser?> = _currentUser.asStateFlow()
@@ -22,6 +26,7 @@ class AuthRepository(private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     suspend fun signInWithEmail(email: String, password: String): Result<FirebaseUser?> {
         return try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
+            result.user?.let { syncUser(it) }
             Result.success(result.user)
         } catch (e: Exception) {
             Result.failure(e)
@@ -31,6 +36,7 @@ class AuthRepository(private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     suspend fun signUpWithEmail(email: String, password: String): Result<FirebaseUser?> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
+            result.user?.let { syncUser(it) }
             Result.success(result.user)
         } catch (e: Exception) {
             Result.failure(e)
@@ -40,10 +46,19 @@ class AuthRepository(private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     suspend fun signInWithCredential(credential: AuthCredential): Result<FirebaseUser?> {
         return try {
             val result = auth.signInWithCredential(credential).await()
+            result.user?.let { syncUser(it) }
             Result.success(result.user)
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    private suspend fun syncUser(user: FirebaseUser) {
+        val data = mapOf(
+            "email" to user.email,
+            "name" to (user.displayName ?: user.email?.substringBefore("@") ?: "User")
+        )
+        firestore.collection("users").document(user.uid).set(data).await()
     }
 
     fun signOut() {

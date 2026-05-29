@@ -14,8 +14,8 @@ android {
         applicationId = "com.domaners.everyminute"
         minSdk = 34
         targetSdk = 37
-        versionCode = 2
-        versionName = "0.11"
+        versionCode = 3
+        versionName = "0.12"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
