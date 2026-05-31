@@ -39,25 +39,6 @@ class TeamRepository(
         }
     }
 
-    suspend fun updateTeam(team: Team): Result<Unit> {
-        return try {
-            val allMembers = (team.coachIds + team.parentIds).distinct()
-            val teamWithMembers = team.copy(memberIds = allMembers)
-            collection.document(team.id).set(teamWithMembers).await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun getTeam(teamId: String): Team? {
-        return try {
-            collection.document(teamId).get().await().toObject(Team::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-    
     suspend fun findUserByEmail(email: String): Map<String, String>? {
         return try {
             val snapshot = firestore.collection("users")

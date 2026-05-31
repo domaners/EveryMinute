@@ -28,7 +28,7 @@ sealed interface Destination : NavKey {
     data class AddEditPlayer(val playerId: String? = null) : Destination
     
     @Serializable
-    data class FixtureDetail(val fixtureId: String) : Destination
+    data class FixtureDetail(val fixtureId: String? = null) : Destination
     @Serializable
     data class AddEditFixture(val fixtureId: String? = null) : Destination
 }

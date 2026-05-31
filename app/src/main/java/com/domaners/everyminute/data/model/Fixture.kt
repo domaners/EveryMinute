@@ -8,9 +8,21 @@ data class Fixture(
     val teamId: String = "",
     val opponent: String = "",
     val date: Long = 0L,
+    val type: String = "League", // League, Cup, Tournament, Friendly, Training
     val venue: String = "",
+    val locationType: String = "Home", // Home, Away, Neutral
     val availability: Map<String, AvailabilityStatus> = emptyMap(),
-    val result: MatchResult? = null
+    val result: MatchResult? = null,
+    val playerStats: List<FixturePlayerStats> = emptyList()
+)
+
+@Serializable
+data class FixturePlayerStats(
+    val playerId: String = "",
+    val minutesPlayed: Int = 0,
+    val goals: Int = 0,
+    val assists: Int = 0,
+    val position: String = "Forward" // Goalkeeper, Defender, Midfielder, Forward
 )
 
 @Serializable

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class FixtureRepository(
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) {
     private val collection = firestore.collection("fixtures")
 
@@ -45,23 +45,6 @@ class FixtureRepository(
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
-        }
-    }
-
-    suspend fun deleteFixture(fixtureId: String): Result<Unit> {
-        return try {
-            collection.document(fixtureId).delete().await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun getFixture(fixtureId: String): Fixture? {
-        return try {
-            collection.document(fixtureId).get().await().toObject(Fixture::class.java)
-        } catch (e: Exception) {
-            null
         }
     }
 }

@@ -79,6 +79,18 @@ class MainViewModel(
         updatePlayer(player.copy(pitchPosition = finalPosition))
     }
 
+    fun addFixture(fixture: Fixture) {
+        viewModelScope.launch {
+            fixtureRepository.addFixture(fixture)
+        }
+    }
+
+    fun updateFixture(fixture: Fixture) {
+        viewModelScope.launch {
+            fixtureRepository.updateFixture(fixture)
+        }
+    }
+
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
 

@@ -207,7 +207,22 @@ fun EveryMinuteApp(
                             TeamScreen()
                         }
                         is Destination.Fixtures -> NavEntry(key) {
-                            FixturesScreen()
+                            FixturesScreen(
+                                onAddFixture = {
+                                    backStack.add(Destination.AddEditFixture())
+                                },
+                                onEditFixture = { fixtureId ->
+                                    backStack.add(Destination.AddEditFixture(fixtureId))
+                                }
+                            )
+                        }
+                        is Destination.AddEditFixture -> NavEntry(key) {
+                            AddEditFixtureScreen(
+                                fixtureId = key.fixtureId,
+                                onBack = {
+                                    backStack.removeAt(backStack.size - 1)
+                                }
+                            )
                         }
                         else -> NavEntry(key) { }
                     }
