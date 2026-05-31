@@ -70,6 +70,12 @@ class MainViewModel(
         }
     }
 
+    fun deletePlayer(playerId: String) {
+        viewModelScope.launch {
+            playerRepository.deletePlayer(playerId)
+        }
+    }
+
     fun updatePlayerPosition(playerId: String, position: com.domaners.everyminute.data.model.Position?) {
         val player = teamPlayers.value.find { it.id == playerId } ?: return
         val finalPosition = if (position != null) {

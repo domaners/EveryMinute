@@ -50,4 +50,13 @@ class PlayerRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun deletePlayer(playerId: String): Result<Unit> {
+        return try {
+            collection.document(playerId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
