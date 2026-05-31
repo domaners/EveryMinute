@@ -195,6 +195,13 @@ fun RegisterContent(
         ) {
             Text("Sign up with Google")
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Version 0.1",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 

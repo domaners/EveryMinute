@@ -29,9 +29,15 @@ class MainViewModel(
         .flatMapLatest { user -> teamRepository.getTeamsForUser(user.uid) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val currentTeam: StateFlow<Team?> = teams
-        .map { it.firstOrNull() } // For now, just pick the first one
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    private val _currentTeamId = MutableStateFlow<String?>(null)
+
+    val currentTeam: StateFlow<Team?> = combine(teams, _currentTeamId) { teams, currentId ->
+        if (currentId != null) teams.find { it.id == currentId } else teams.firstOrNull()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    fun selectTeam(teamId: String) {
+        _currentTeamId.value = teamId
+    }
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     val teamPlayers: StateFlow<List<Player>> = currentTeam

@@ -14,6 +14,8 @@ sealed interface Destination : NavKey {
     @Serializable
     data object CreateTeam : Destination
     @Serializable
+    data object SelectTeam : Destination
+    @Serializable
     data object Lineup : Destination
     @Serializable
     data object Team : Destination
