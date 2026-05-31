@@ -14,16 +14,10 @@ import com.domaners.everyminute.ui.theme.EveryMinuteTheme
 @Composable
 fun DashboardScreen(
     viewModel: MainViewModel = viewModel(),
-    onCreateTeamClick: () -> Unit = {}
+    onCreateTeamClick: () -> Unit = {},
+    onLineupClick: () -> Unit = {}
 ) {
-    val teams by viewModel.teams.collectAsState()
     val currentTeam by viewModel.currentTeam.collectAsState()
-
-    LaunchedEffect(teams) {
-        if (teams.isEmpty()) {
-            onCreateTeamClick()
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -33,20 +27,62 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.Top
     ) {
         if (currentTeam != null) {
+            // Team Management UI
             Text(
                 text = currentTeam?.name ?: "",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(vertical = 24.dp)
             )
-            Spacer(modifier = Modifier.height(24.dp))
-        }
+            
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { /* Navigate to Team details */ }
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "Team Management", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "Manage your players, coaches, and parents.")
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { /* Navigate to Fixtures */ }
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "Fixtures", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "View upcoming games and results.")
+                }
+            }
 
-        Text(
-            text = "Dashboard",
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Welcome to EveryMinute!")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onLineupClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Set Preferred Lineup")
+            }
+        } else {
+            // No Team UI
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "Welcome to EveryMinute!",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = "You haven't set up a team yet.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.secondary
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(onClick = onCreateTeamClick) {
+                Text("Set Up Your Team")
+            }
+            Spacer(modifier = Modifier.weight(1.2f))
+        }
     }
 }
 

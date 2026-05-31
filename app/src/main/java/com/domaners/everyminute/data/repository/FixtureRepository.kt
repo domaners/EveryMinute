@@ -11,11 +11,11 @@ import kotlinx.coroutines.tasks.await
 class FixtureRepository(
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) {
-    private fun getCollection(userId: String) = 
-        firestore.collection("users").document(userId).collection("fixtures")
+    private val collection = firestore.collection("fixtures")
 
-    fun getFixtures(userId: String): Flow<List<Fixture>> = callbackFlow {
-        val subscription = getCollection(userId)
+    fun getFixturesForTeam(teamId: String): Flow<List<Fixture>> = callbackFlow {
+        val subscription = collection
+            .whereEqualTo("teamId", teamId)
             .orderBy("date", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -28,9 +28,9 @@ class FixtureRepository(
         awaitClose { subscription.remove() }
     }
 
-    suspend fun addFixture(userId: String, fixture: Fixture): Result<Unit> {
+    suspend fun addFixture(fixture: Fixture): Result<Unit> {
         return try {
-            val docRef = getCollection(userId).document()
+            val docRef = collection.document()
             val fixtureWithId = fixture.copy(id = docRef.id)
             docRef.set(fixtureWithId).await()
             Result.success(Unit)
@@ -39,27 +39,27 @@ class FixtureRepository(
         }
     }
 
-    suspend fun updateFixture(userId: String, fixture: Fixture): Result<Unit> {
+    suspend fun updateFixture(fixture: Fixture): Result<Unit> {
         return try {
-            getCollection(userId).document(fixture.id).set(fixture).await()
+            collection.document(fixture.id).set(fixture).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun deleteFixture(userId: String, fixtureId: String): Result<Unit> {
+    suspend fun deleteFixture(fixtureId: String): Result<Unit> {
         return try {
-            getCollection(userId).document(fixtureId).delete().await()
+            collection.document(fixtureId).delete().await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun getFixture(userId: String, fixtureId: String): Fixture? {
+    suspend fun getFixture(fixtureId: String): Fixture? {
         return try {
-            getCollection(userId).document(fixtureId).get().await().toObject(Fixture::class.java)
+            collection.document(fixtureId).get().await().toObject(Fixture::class.java)
         } catch (e: Exception) {
             null
         }

@@ -5,10 +5,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Player(
     val id: String = "",
+    val teamId: String = "",
     val name: String = "",
+    val squadNumber: Int = 0,
     val photoUrl: String? = null,
     val isActive: Boolean = true,
-    val stats: PlayerStats = PlayerStats()
+    val stats: PlayerStats = PlayerStats(),
+    val pitchPosition: Position? = null
+)
+
+@Serializable
+data class Position(
+    val x: Float,
+    val y: Float
 )
 
 @Serializable

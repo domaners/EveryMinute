@@ -10,24 +10,30 @@ import kotlinx.coroutines.tasks.await
 class PlayerRepository(
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) {
-    private fun getCollection(userId: String) = 
-        firestore.collection("users").document(userId).collection("players")
+    private fun getCollection() = firestore.collection("players")
 
-    fun getPlayers(userId: String): Flow<List<Player>> = callbackFlow {
-        val subscription = getCollection(userId).addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                close(error)
-                return@addSnapshotListener
+    fun getPlayersForTeam(teamId: String): Flow<List<Player>> = callbackFlow {
+        val subscription = getCollection()
+            .whereEqualTo("teamId", teamId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val players = try {
+                    snapshot?.toObjects(Player::class.java) ?: emptyList()
+                } catch (e: Exception) {
+                    android.util.Log.e("PlayerRepository", "Error deserializing players", e)
+                    emptyList()
+                }
+                trySend(players)
             }
-            val players = snapshot?.toObjects(Player::class.java) ?: emptyList()
-            trySend(players)
-        }
         awaitClose { subscription.remove() }
     }
 
-    suspend fun addPlayer(userId: String, player: Player): Result<Unit> {
+    suspend fun addPlayer(player: Player): Result<Unit> {
         return try {
-            val docRef = getCollection(userId).document()
+            val docRef = getCollection().document()
             val playerWithId = player.copy(id = docRef.id)
             docRef.set(playerWithId).await()
             Result.success(Unit)
@@ -36,27 +42,27 @@ class PlayerRepository(
         }
     }
 
-    suspend fun updatePlayer(userId: String, player: Player): Result<Unit> {
+    suspend fun updatePlayer(player: Player): Result<Unit> {
         return try {
-            getCollection(userId).document(player.id).set(player).await()
+            getCollection().document(player.id).set(player).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun deletePlayer(userId: String, playerId: String): Result<Unit> {
+    suspend fun deletePlayer(playerId: String): Result<Unit> {
         return try {
-            getCollection(userId).document(playerId).delete().await()
+            getCollection().document(playerId).delete().await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun getPlayer(userId: String, playerId: String): Player? {
+    suspend fun getPlayer(playerId: String): Player? {
         return try {
-            getCollection(userId).document(playerId).get().await().toObject(Player::class.java)
+            getCollection().document(playerId).get().await().toObject(Player::class.java)
         } catch (e: Exception) {
             null
         }

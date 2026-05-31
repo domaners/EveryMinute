@@ -9,5 +9,6 @@ data class Team(
     val iconUrl: String? = null,
     val coachIds: List<String> = emptyList(),
     val parentIds: List<String> = emptyList(),
-    val playerIds: List<String> = emptyList()
+    val playerIds: List<String> = emptyList(),
+    val memberIds: List<String> = emptyList() // All users who have access
 )

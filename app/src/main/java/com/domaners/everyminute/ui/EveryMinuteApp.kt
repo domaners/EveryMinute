@@ -18,6 +18,7 @@ import com.domaners.everyminute.ui.navigation.Destination
 import com.domaners.everyminute.ui.screens.CreateTeamScreen
 import com.domaners.everyminute.ui.screens.DashboardScreen
 import com.domaners.everyminute.ui.screens.FixturesScreen
+import com.domaners.everyminute.ui.screens.LineupScreen
 import com.domaners.everyminute.ui.screens.LoginScreen
 import com.domaners.everyminute.ui.screens.RegisterScreen
 import com.domaners.everyminute.ui.screens.TeamScreen
@@ -121,6 +122,16 @@ fun EveryMinuteApp(
                         DashboardScreen(
                             onCreateTeamClick = {
                                 backStack.add(Destination.CreateTeam)
+                            },
+                            onLineupClick = {
+                                backStack.add(Destination.Lineup)
+                            }
+                        )
+                    }
+                    is Destination.Lineup -> NavEntry(key) {
+                        LineupScreen(
+                            onBack = {
+                                backStack.removeAt(backStack.size - 1)
                             }
                         )
                     }
